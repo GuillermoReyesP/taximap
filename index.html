@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>TaxiMap PWA</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlRheGlNYXAgUFdBIiwKICAic2hvcnRfbmFtZSI6ICJUYXhpTWFwIiwKICAiZGVzY3JpcHRpb24iOiAiQXBsaWNhY2nDs24gZGUgdGF4aSBjb24gR1BTIHkgem9uYXMgVU1hcCIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qUXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREkwTUNBeU5EQWlJR1pwYkd3OUlpTXdNREF3TURBaUlIaHRiRzV6UFNKb2RIUndjem92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaVBnb2dJRHhqYVhKamJHVWdZM2c5SWpFeU1DSWdZM2s5SWpFeU1DSWdjajBpTXpBaUlHWnBiR3c5SWpFd1FqazRNU0l2UGdvZ0lEeDBaWGgwSUhnOUlqRXlNQ0lnZVQwaU1UUXdJaUJtYjI1MExYTnBlbVU5SWpNMklpQm1hV3hzUFNKM2FHbDBaU0lnZEdWNGRDMWhibU5vYjNJOUltMXBaR1JzWlNJK1BGOUROekE4TDNSbGVIUStDaUE4TDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiMjQweDI0MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU5URXlJaUJvWldsbmFIUTlJalV4TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJalV4TWlBMU1USWlJR1pwYkd3OUlpTXdNREF3TURBaUlIaHRiRzV6UFNKb2RIUndjem92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaVBnb2dJRHhqYVhKamJHVWdZM2c5SWpJMU5pSWdZM2s5SWpJMU5pSWdjajBpTmpRaUlHWnBiR3c5SWpFd1FqazRNU0l2UGdvZ0lEeDBaWGgwSUhnOUlqSTFOaUlnZVQwaU1qazJJaUJtYjI1MExYTnBlbVU5SWpjeU5pSWdabWxzYkQwaWQyaHBkR1VpSUhSbGVIUXRZVzVqYUc5eVBTSnRhV1JrYkdVaVBsUmhlR2xOU1dWeUNpQWdQQzkwWlhoMFBnb2dQQzl6ZG1jKyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MCAyNDAiIGZpbGw9IiMwMDAwMDAiIHhtbG5zPSJodHRwOi8vL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxjaXJjbGUgY3g9IjEyMCIgY3k9IjEyMCIgcj0iMzAiIGZpbGw9IiMxMEI5ODEiLz4KICA8dGV4dCB4PSIxMjAiIHk9IjE0MCIgZm9udC1zaXplPSIzNiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPjxfQ0Y8L3RleHQ+CiA8L3N2Zz4=">
+  
+  <!-- Meta tags para PWA -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="TaxiMap">
+  <meta name="msapplication-TileColor" content="#000000">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- React y Tailwind CSS -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Leaflet CSS/JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    /* Estilos para PWA */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Prevenir zoom en iOS */
+    input[type="color"],
+    input[type="date"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="email"],
+    input[type="month"],
+    input[type="number"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="text"],
+    input[type="time"],
+    input[type="url"],
+    input[type="week"],
+    select:focus,
+    textarea {
+      font-size: 16px;
+    }
+
+    /* Estilos para el marcador del taxi */
+    .taxi-marker {
+      border: none !important;
+      background: transparent !important;
+    }
+
+    /* Fullscreen en iOS */
+    @media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+      .viewport-safe {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
+
+    /* Ocultar scrollbars en móvil */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { MapPin, Navigation, Zap, Phone, Settings, Upload } = lucide;
+
+    const TaxiApp = () => {
+      const [status, setStatus] = useState('free');
+      const [currentZone, setCurrentZone] = useState('Fuera de zona');
+      const [location, setLocation] = useState({ lat: 28.4636, lng: -16.2518 });
+      const [gpsEnabled, setGpsEnabled] = useState(true);
+      const [useRealGPS, setUseRealGPS] = useState(false);
+      const [zones, setZones] = useState({});
+
+      const mapRef = useRef(null);
+      const leafletMap = useRef(null);
+      const userMarker = useRef(null);
+      const zoneShapes = useRef([]);
+      const fileInputRef = useRef(null);
+
+      const zoneColors = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#1E40AF', '#DC2626', '#047857', '#D97706', '#7C3AED', '#BE185D', '#0F766E', '#EA580C'];
+
+      // Función para calcular distancia
+      const getDistance = (lat1, lng1, lat2, lng2) => {
+        const R = 6371e3;
+        const φ1 = lat1 * Math.PI/180;
+        const φ2 = lat2 * Math.PI/180;
+        const Δφ = (lat2-lat1) * Math.PI/180;
+        const Δλ = (lng2-lng1) * Math.PI/180;
+
+        const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                  Math.cos(φ1) * Math.cos(φ2) *
+                  Math.sin(Δλ/2) * Math.sin(Δλ/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R * c;
+      };
+
+      // Función para verificar si un punto está dentro de un polígono
+      const isPointInPolygon = (lat, lng, polygonCoords) => {
+        let inside = false;
+        const x = lat;
+        const y = lng;
+        
+        for (let i = 0, j = polygonCoords.length - 1; i < polygonCoords.length; j = i++) {
+          const xi = polygonCoords[i][0];
+          const yi = polygonCoords[i][1];
+          const xj = polygonCoords[j][0];
+          const yj = polygonCoords[j][1];
+          
+          if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+            inside = !inside;
+          }
+        }
+        
+        return inside;
+      };
+
+      // Cargar archivo UMap
+      const loadUMapFile = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const umapData = JSON.parse(e.target.result);
+            parseUMapData(umapData);
+          } catch (error) {
+            alert('Error al leer el archivo UMap');
+          }
+        };
+        reader.readAsText(file);
+      };
+
+      // Parsear datos de UMap
+      const parseUMapData = (umapData) => {
+        const newZones = {};
+        let colorIndex = 0;
+
+        const findFeatures = (obj, path = '') => {
+          if (!obj || typeof obj !== 'object') return;
+          
+          if (obj.features && Array.isArray(obj.features)) {
+            obj.features.forEach((feature, index) => {
+              const name = feature.properties?.name || 
+                          feature.properties?.title || 
+                          feature.properties?.description || 
+                          `Zona ${colorIndex + 1}`;
+              
+              if (!name) return;
+
+              if (feature.geometry?.type === 'Polygon') {
+                let coordinates;
+                if (feature.geometry.coordinates && Array.isArray(feature.geometry.coordinates)) {
+                  if (Array.isArray(feature.geometry.coordinates[0])) {
+                    coordinates = feature.geometry.coordinates[0];
+                  } else {
+                    coordinates = feature.geometry.coordinates;
+                  }
+                }
+                
+                if (!coordinates || coordinates.length === 0) return;
+
+                const leafletCoords = coordinates.map(coord => {
+                  if (Array.isArray(coord) && coord.length >= 2) {
+                    return [coord[1], coord[0]];
+                  }
+                  return coord;
+                }).filter(coord => Array.isArray(coord) && coord.length >= 2);
+                
+                if (leafletCoords.length === 0) return;
+
+                let finalColor = zoneColors[colorIndex % zoneColors.length];
+                
+                const colorSources = [
+                  feature.properties?._umap_options?.color,
+                  feature.properties?.color,
+                  feature._umap_options?.color,
+                  obj._umap_options?.color
+                ];
+                
+                for (const colorSource of colorSources) {
+                  if (colorSource) {
+                    const umapColor = colorSource.toString().toLowerCase();
+                    
+                    const colorMap = {
+                      'red': '#EF4444', 'green': '#10B981', 'blue': '#3B82F6',
+                      'yellow': '#F59E0B', 'purple': '#8B5CF6', 'pink': '#EC4899',
+                      'orange': '#F97316', 'cyan': '#14B8A6', 'darkred': '#7F1D1D',
+                      'darkgreen': '#065F46', 'darkblue': '#1E3A8A', 'lightred': '#FCA5A5',
+                      'lightgreen': '#86EFAC', 'lightblue': '#93C5FD', 'black': '#000000',
+                      'white': '#FFFFFF', 'gray': '#6B7280', 'grey': '#6B7280'
+                    };
+                    
+                    if (colorMap[umapColor]) {
+                      finalColor = colorMap[umapColor];
+                      break;
+                    } else if (umapColor.startsWith('#')) {
+                      finalColor = umapColor;
+                      break;
+                    }
+                  }
+                }
+                
+                newZones[name] = {
+                  type: 'polygon',
+                  coordinates: leafletCoords,
+                  color: finalColor
+                };
+                
+                colorIndex++;
+                
+              } else if (feature.geometry?.type === 'Point') {
+                const coords = feature.geometry.coordinates;
+                if (coords && coords.length >= 2) {
+                  const [lng, lat] = coords;
+                  
+                  newZones[name] = {
+                    type: 'circle',
+                    lat: lat,
+                    lng: lng,
+                    color: zoneColors[colorIndex % zoneColors.length],
+                    radius: 100
+                  };
+                  colorIndex++;
+                }
+              }
+            });
+          }
+          
+          for (const key in obj) {
+            if (obj.hasOwnProperty(key) && typeof obj[key] === 'object') {
+              findFeatures(obj[key], path ? `${path}.${key}` : key);
+            }
+          }
+        };
+
+        findFeatures(umapData);
+
+        if (Object.keys(newZones).length === 0) {
+          alert('No se encontraron polígonos válidos en el archivo .umap');
+          return;
+        }
+        
+        setZones(newZones);
+
+        if (umapData.properties?.center && leafletMap.current) {
+          const { lat, lng } = umapData.properties.center;
+          const zoom = umapData.properties.zoom || 15;
+          leafletMap.current.setView([lat, lng], zoom);
+        } else if (Object.keys(newZones).length > 0 && leafletMap.current) {
+          const firstZone = Object.values(newZones)[0];
+          if (firstZone.type === 'polygon' && firstZone.coordinates.length > 0) {
+            const centerLat = firstZone.coordinates.reduce((sum, coord) => sum + coord[0], 0) / firstZone.coordinates.length;
+            const centerLng = firstZone.coordinates.reduce((sum, coord) => sum + coord[1], 0) / firstZone.coordinates.length;
+            leafletMap.current.setView([centerLat, centerLng], 15);
+          }
+        }
+      };
+
+      // Actualizar zonas en el mapa
+      const updateMapZones = () => {
+        if (!leafletMap.current || !window.L) return;
+
+        zoneShapes.current.forEach(({ shape }) => {
+          leafletMap.current.removeLayer(shape);
+        });
+        zoneShapes.current = [];
+
+        Object.entries(zones).forEach(([zoneName, zoneData]) => {
+          let shape;
+          
+          if (zoneData.type === 'polygon') {
+            shape = window.L.polygon(zoneData.coordinates, {
+              color: zoneData.color,
+              fillColor: zoneData.color,
+              fillOpacity: 0.3,
+              weight: 3
+            });
+          } else if (zoneData.type === 'circle') {
+            shape = window.L.circle([zoneData.lat, zoneData.lng], {
+              color: zoneData.color,
+              fillColor: zoneData.color,
+              fillOpacity: 0.2,
+              weight: 2,
+              radius: zoneData.radius
+            });
+          }
+          
+          if (shape) {
+            shape.addTo(leafletMap.current);
+            
+            const popupContent = `<b>${zoneName}</b><br>Tipo: ${zoneData.type}<br>Color: ${zoneData.color}`;
+            shape.bindPopup(popupContent);
+            
+            zoneShapes.current.push({ name: zoneName, shape, data: zoneData });
+          }
+        });
+      };
+
+      // Crear marcador del taxi
+      const createTaxiIcon = () => {
+        const color = status === 'free' ? '#10B981' : '#EF4444';
+        
+        return window.L.divIcon({
+          className: 'taxi-marker',
+          html: `<div style="
+            width: 30px; 
+            height: 30px; 
+            background: ${color}; 
+            border: 3px solid white; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            font-size: 16px;
+          ">🚕</div>`,
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+      };
+
+      // Inicializar mapa
+      useEffect(() => {
+        if (window.L && mapRef.current && !leafletMap.current) {
+          leafletMap.current = window.L.map(mapRef.current, {
+            zoomControl: false,
+            attributionControl: false
+          }).setView([location.lat, location.lng], 13);
+
+          window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(leafletMap.current);
+
+          userMarker.current = window.L.marker([location.lat, location.lng], {
+            icon: createTaxiIcon()
+          }).addTo(leafletMap.current);
+        }
+      }, []);
+
+      // Actualizar zonas cuando cambie el estado
+      useEffect(() => {
+        updateMapZones();
+      }, [zones]);
+
+      // Actualizar color del taxi cuando cambia el estado
+      useEffect(() => {
+        if (userMarker.current && window.L) {
+          userMarker.current.setIcon(createTaxiIcon());
+        }
+      }, [status]);
+
+      // GPS real y simulado
+      useEffect(() => {
+        if (!useRealGPS) {
+          const simulateMovement = () => {
+            const newLat = location.lat + (Math.random() - 0.5) * 0.0005;
+            const newLng = location.lng + (Math.random() - 0.5) * 0.0005;
+            
+            setLocation({ lat: newLat, lng: newLng });
+            updateTaxiPosition(newLat, newLng);
+          };
+
+          const interval = setInterval(simulateMovement, 2000);
+          return () => clearInterval(interval);
+        } else {
+          let watchId;
+
+          if (navigator.geolocation) {
+            setGpsEnabled(true);
+
+            const options = {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 1000
+            };
+
+            const onSuccess = (position) => {
+              const newLat = position.coords.latitude;
+              const newLng = position.coords.longitude;
+              
+              setLocation({ lat: newLat, lng: newLng });
+              updateTaxiPosition(newLat, newLng);
+            };
+
+            const onError = (error) => {
+              setGpsEnabled(false);
+              alert('Error GPS: ' + error.message + '\nCambiando a modo simulado...');
+              setUseRealGPS(false);
+            };
+
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+            watchId = navigator.geolocation.watchPosition(onSuccess, onError, options);
+          } else {
+            alert('GPS no soportado en este dispositivo\nUsando modo simulado...');
+            setGpsEnabled(false);
+            setUseRealGPS(false);
+          }
+
+          return () => {
+            if (watchId) {
+              navigator.geolocation.clearWatch(watchId);
+            }
+          };
+        }
+      }, [location, zones, currentZone, useRealGPS]);
+
+      // Función para actualizar posición del taxi y detectar zonas
+      const updateTaxiPosition = (newLat, newLng) => {
+        if (userMarker.current) {
+          userMarker.current.setLatLng([newLat, newLng]);
+          
+          let detectedZone = 'Fuera de zona';
+          let previousZone = currentZone;
+
+          Object.entries(zones).forEach(([name, data]) => {
+            if (data.type === 'polygon') {
+              if (isPointInPolygon(newLat, newLng, data.coordinates)) {
+                detectedZone = name;
+              }
+            } else if (data.type === 'circle') {
+              const distance = getDistance(newLat, newLng, data.lat, data.lng);
+              if (distance < data.radius) {
+                detectedZone = name;
+              }
+            }
+          });
+
+          if (detectedZone !== 'Fuera de zona' && detectedZone !== previousZone) {
+            // Usar vibración en lugar de alert para mejor UX
+            if (navigator.vibrate) {
+              navigator.vibrate([200, 100, 200]);
+            }
+            
+            // Notificación menos intrusiva
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+              position: fixed;
+              top: 80px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: #10B981;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 10px;
+              z-index: 10000;
+              font-weight: bold;
+              box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = `¡Zona: ${detectedZone}!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+              document.body.removeChild(notification);
+            }, 3000);
+          }
+
+          setCurrentZone(detectedZone);
+        }
+      };
+
+      const handleStatusToggle = () => {
+        const newStatus = status === 'free' ? 'busy' : 'free';
+        setStatus(newStatus);
+        
+        // Feedback háptico
+        if (navigator.vibrate) {
+          navigator.vibrate(100);
+        }
+      };
+
+      const toggleGPSMode = () => {
+        setUseRealGPS(!useRealGPS);
+        
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      };
+
+      return (
+        <div className="h-screen bg-gray-900 text-white flex flex-col viewport-safe">
+          {/* Header */}
+          <div className="bg-black p-4 flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full ${gpsEnabled ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
+              <span className="text-sm font-medium">
+                {useRealGPS ? 'GPS REAL' : 'GPS SIM'} {gpsEnabled ? 'ON' : 'OFF'}
+              </span>
+            </div>
+            <div className="text-center">
+              <h1 className="text-lg font-bold">TaxiMap</h1>
+            </div>
+            <div className="flex space-x-2">
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-all active:scale-95"
+                title="Cargar archivo UMap"
+              >
+                <Upload className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={toggleGPSMode}
+                className={`p-2 rounded-lg transition-all active:scale-95 ${
+                  useRealGPS ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                }`}
+                title={useRealGPS ? 'Cambiar a GPS simulado' : 'Cambiar a GPS real'}
+              >
+                {useRealGPS ? '📡' : '🎯'}
+              </button>
+            </div>
+          </div>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".umap,.json"
+            onChange={loadUMapFile}
+            style={{ display: 'none' }}
+          />
+
+          {/* Zona actual */}
+          <div className="bg-gray-800 px-4 py-2 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4" style={{ color: zones[currentZone]?.color || '#6B7280' }} />
+              <span className="font-medium">Zona: {currentZone}</span>
+            </div>
+            <div className="text-xs text-gray-400">
+              {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+            </div>
+          </div>
+
+          {/* Instrucciones */}
+          <div className="bg-gray-700 text-white px-4 py-2 text-sm">
+            <div className="flex items-center justify-between">
+              <span>📱 {useRealGPS ? 'GPS REAL activo' : 'GPS SIMULADO'} | ⬆️ Carga .umap</span>
+              <span className="text-xs opacity-75">Zonas: {Object.keys(zones).length}</span>
+            </div>
+          </div>
+
+          {/* Mapa */}
+          <div className="flex-1 relative">
+            <div 
+              ref={mapRef} 
+              className="w-full h-full"
+              style={{ background: '#f0f0f0' }}
+            />
+
+            {/* Controles de zoom */}
+            <div className="absolute right-4 top-4 flex flex-col space-y-2 z-10">
+              <button 
+                onClick={() => leafletMap.current?.zoomOut()}
+                className="w-10 h-10 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white text-xl font-bold hover:bg-opacity-90 transition-all active:scale-95"
+              >
+                −
+              </button>
+              <button 
+                onClick={() => leafletMap.current?.setView([location.lat, location.lng], 15)}
+                className="w-10 h-10 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white hover:bg-opacity-90 transition-all active:scale-95"
+              >
+                <Navigation className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Panel inferior */}
+          <div className="bg-black p-6 space-y-4">
+            <div className="flex space-x-4">
+              <button 
+                onClick={handleStatusToggle}
+                className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 active:scale-95 ${
+                  status === 'free' 
+                    ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/30' 
+                    : 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/30'
+                }`}
+              >
+                {status === 'free' ? '🟢 LIBRE' : '🔴 OCUPADO'}
+              </button>
+              
+              <button className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl transition-all active:scale-95">
+                <Phone className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="flex justify-between text-sm text-gray-400">
+              <span>Tiempo en zona: 12 min</span>
+              <span>Servicios hoy: 8</span>
+              <span className="flex items-center space-x-1">
+                <Zap className="w-4 h-4" />
+                <span>85%</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Service Worker inline
+        const swCode = `
+          const CACHE_NAME = 'taximap-v1';
+          const urlsToCache = [
+            '/',
+            'https://unpkg.com/react@18/umd/react.production.min.js',
+            'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+            'https://unpkg.com/@babel/standalone/babel.min.js',
+            'https://cdn.tailwindcss.com',
+            'https://unpkg.com/lucide@latest/dist/umd/lucide.js',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+          ];
+
+          self.addEventListener('install', (event) => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then((cache) => {
+                  return cache.addAll(urlsToCache);
+                })
+            );
+          });
+
+          self.addEventListener('fetch', (event) => {
+            event.respondWith(
+              caches.match(event.request)
+                .then((response) => {
+                  if (response) {
+                    return response;
+                  }
+                  return fetch(event.request);
+                }
+              )
+            );
+          });
+        `;
+
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        
+        navigator.serviceWorker.register(swUrl)
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+
+    // Install prompt
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Mostrar botón de instalación personalizado después de 3 segundos
+      setTimeout(() => {
+        const installButton = document.createElement('div');
+        installButton.style.cssText = `
+          position: fixed;
+          bottom: 100px;
+          right: 20px;
+          background: #10B981;
+          color: white;
+          padding: 12px 20px;
+          border-radius: 25px;
+          cursor: pointer;
+          font-weight: bold;
+          box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+          z-index: 10000;
+          animation: pulse 2s infinite;
+        `;
+        installButton.innerHTML = '📱 Instalar App';
+        installButton.onclick = () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+              }
+              deferredPrompt = null;
+              document.body.removeChild(installButton);
+            });
+          }
+        };
+        document.body.appendChild(installButton);
+        
+        // Auto-ocultar después de 10 segundos
+        setTimeout(() => {
+          if (document.body.contains(installButton)) {
+            document.body.removeChild(installButton);
+          }
+        }, 10000);
+      }, 3000);
+    });
+
+    // Render the app
+    ReactDOM.render(<TaxiApp />, document.getElementById('root'));
+  </script>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+  </style>
+</body>
+</html>oomIn()}
+                className="w-10 h-10 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white text-xl font-bold hover:bg-opacity-90 transition-all active:scale-95"
+              >
+                +
+              </button>
+              <button 
+                onClick={() => leafletMap.current?.z
