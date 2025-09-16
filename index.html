@@ -1,3 +1,4 @@
+ 
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -146,6 +147,8 @@
     let gpsEnabled = true;
     let watchId;
     let simulationInterval;
+    let currentStreet = 'Obteniendo ubicación...';
+    let speechEnabled = true;
 
     const zoneColors = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
 
@@ -262,9 +265,38 @@
         // Actualizar coordenadas en UI
         document.getElementById('coordinates').textContent = `${newLat.toFixed(4)}, ${newLng.toFixed(4)}`;
         
+        // Obtener nombre de la calle
+        getStreetName(newLat, newLng);
+        
         // Detectar zonas
         detectZone(newLat, newLng);
       }
+    }
+
+    // Obtener nombre de la calle usando geocodificación inversa
+    function getStreetName(lat, lng) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+        .then(response => response.json())
+        .then(data => {
+          let streetName = 'Calle desconocida';
+          
+          if (data.address) {
+            streetName = data.address.road || 
+                        data.address.pedestrian || 
+                        data.address.path ||
+                        data.address.footway ||
+                        data.address.cycleway ||
+                        data.display_name?.split(',')[0] ||
+                        'Ubicación sin nombre';
+          }
+          
+          currentStreet = streetName;
+          document.getElementById('current-street').textContent = streetName;
+        })
+        .catch(() => {
+          currentStreet = 'Error al obtener calle';
+          document.getElementById('current-street').textContent = currentStreet;
+        });
     }
 
     // Detectar zona
@@ -288,10 +320,19 @@
       document.getElementById('current-zone').textContent = `Zona: ${currentZone}`;
     }
 
-    // Mostrar notificación de zona
+    // Mostrar notificación de zona con voz
     function showZoneNotification(zoneName) {
       if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200]);
+      }
+      
+      // Anuncio por voz
+      if (speechEnabled && 'speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(`Entrando en zona ${zoneName}`);
+        utterance.lang = 'es-ES';
+        utterance.volume = 0.8;
+        utterance.rate = 1.0;
+        speechSynthesis.speak(utterance);
       }
       
       const notification = document.createElement('div');
@@ -429,6 +470,93 @@
 
     function centerMap() {
       if (map) map.setView([taxiLocation.lat, taxiLocation.lng], 15);
+    }
+
+    function centerOnMyLocation() {
+      if (!navigator.geolocation) {
+        alert('GPS no disponible en este dispositivo');
+        return;
+      }
+      
+      // Mostrar indicador de carga
+      const btn = event.target;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '⌛';
+      btn.disabled = true;
+      
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          // Centrar mapa en ubicación real
+          map.setView([lat, lng], 16);
+          
+          // Crear marcador temporal de "mi ubicación"
+          const myLocationIcon = L.divIcon({
+            className: 'my-location-marker',
+            html: '<div style="width: 20px; height: 20px; background: #3B82F6; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px rgba(59,130,246,0.5);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          });
+          
+          const myLocationMarker = L.marker([lat, lng], { icon: myLocationIcon }).addTo(map);
+          myLocationMarker.bindPopup('📍 Tu ubicación actual').openPopup();
+          
+          // Remover marcador después de 5 segundos
+          setTimeout(() => {
+            map.removeLayer(myLocationMarker);
+          }, 5000);
+          
+          // Anuncio por voz
+          if (speechEnabled && 'speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance('Ubicación centrada');
+            utterance.lang = 'es-ES';
+            utterance.volume = 0.6;
+            speechSynthesis.speak(utterance);
+          }
+          
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
+        },
+        (error) => {
+          alert('Error al obtener ubicación: ' + error.message);
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        }
+      );
+    }
+
+    function toggleSpeech() {
+      speechEnabled = !speechEnabled;
+      const btn = document.getElementById('speech-toggle');
+      
+      if (speechEnabled) {
+        btn.textContent = '🔊';
+        btn.title = 'Desactivar voz';
+        btn.className = 'text-xs bg-green-600 hover:bg-green-500 px-2 py-1 rounded transition-all';
+        
+        // Confirmación por voz
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('Voz activada');
+          utterance.lang = 'es-ES';
+          utterance.volume = 0.8;
+          speechSynthesis.speak(utterance);
+        }
+      } else {
+        btn.textContent = '🔇';
+        btn.title = 'Activar voz';
+        btn.className = 'text-xs bg-gray-600 hover:bg-gray-500 px-2 py-1 rounded transition-all';
+      }
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
     }
 
     function loadUMapFile() {
