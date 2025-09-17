@@ -1,34 +1,68 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#000000"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
   <title>TaxiMap PWA</title>
-
-  <!-- PWA Manifest (mantengo el base64 que tenías) -->
+  
+  <!-- PWA Manifest -->
   <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlRheGlNYXAgUFdBIiwKICAic2hvcnRfbmFtZSI6ICJUYXhpTWFwIiwKICAiZGVzY3JpcHRpb24iOiAiQXBsaWNhY2nDs24gZGUgdGF4aSBjb24gR1BTIHkgem9uYXMgVU1hcCIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qUXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREkwTUNBeU5EQWlJR1pwYkd3OUlpTXdNREF3TURBaUlIaHRiRzV6UFNKb2RIUndjem92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaVBnb2dJRHhqYVhKamJHVWdZM2c5SWpFeU1DSWdZM2s5SWpFeU1DSWdjajBpTXpBaUlHWnBiR3c5SWpFd1FqazRNU0l2UGdvZ0lEeDBaWGgwSUhnOUlqRXlNQ0lnZVQwaU1UUXdJaUJtYjI1MExYTnBlbVU5SWpNMklpQm1hV3hzUFNKM2FHbDBaU0lnZEdWNGRDMWhibU5vYjNJOUltMXBaR1JzWlNJK1BGOUROekE4TDNSbGVIUStDaUE4TDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiMjQweDI0MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9CiAgXQp9">
+  
+  <!-- Meta tags para PWA -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="TaxiMap">
 
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-  <meta name="apple-mobile-web-app-title" content="TaxiMap"/>
-
-  <!-- Tailwind -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"/>
+  
+  <!-- Leaflet CSS/JS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 
   <style>
-    body { margin:0; padding:0; background:#1f2937; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent; }
-    .taxi-marker { border: none !important; background: transparent !important; }
-    .leaflet-container { background: #f0f0f0 !important; }
-    .my-location-pulse { animation: locationPulse 1.6s infinite; }
-    @keyframes locationPulse { 0%{ transform:scale(1); opacity:1 } 50%{ transform:scale(1.3); opacity:0.6 } 100%{ transform:scale(1); opacity:1 } }
-    @keyframes slideDown { from { transform: translateX(-50%) translateY(-12px); opacity:0 } to { transform: translateX(-50%) translateY(0); opacity:1 } }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1f2937;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .taxi-marker, .my-location-marker {
+      border: none !important;
+      background: transparent !important;
+    }
+
+    .leaflet-container {
+      background: #f0f0f0 !important;
+    }
+
+    .my-location-pulse {
+      animation: locationPulse 2s infinite;
+    }
+
+    @keyframes locationPulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+
+    /* Z-index más alto para los controles */
+    .map-controls {
+      z-index: 1000 !important;
+      position: relative;
+    }
   </style>
 </head>
 <body>
@@ -56,7 +90,7 @@
         </div>
       </div>
 
-      <input id="fileInput" type="file" accept=".umap,.json" onchange="handleFileLoad(event)" style="display:none;">
+      <input id="fileInput" type="file" accept=".umap,.json" onchange="handleFileLoad(event)" style="display: none;">
 
       <!-- Zona y calle actual -->
       <div class="bg-gray-800 px-4 py-2">
@@ -83,23 +117,32 @@
 
       <!-- Mapa -->
       <div class="flex-1 relative">
-        <div id="map" class="w-full h-full" style="background:#f0f0f0;"></div>
+        <div id="map" class="w-full h-full" style="background: #f0f0f0;"></div>
 
-        <!-- Controles del mapa -->
-        <div class="absolute right-4 top-4 flex flex-col space-y-2 z-10">
-          <button onclick="zoomIn()" class="w-12 h-12 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white text-xl font-bold hover:bg-opacity-90 transition-all active:scale-95">+</button>
-          <button onclick="zoomOut()" class="w-12 h-12 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white text-xl font-bold hover:bg-opacity-90 transition-all active:scale-95">−</button>
-          <button onclick="centerOnTaxi()" class="w-12 h-12 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white hover:bg-opacity-90 transition-all active:scale-95" title="Centrar en taxi">🚕</button>
-          <!-- pasamos event para poder estilizar el botón temporalmente -->
-          <button onclick="centerOnMyLocation(event)" class="w-12 h-12 bg-blue-600 bg-opacity-80 rounded-lg flex items-center justify-center text-white hover:bg-opacity-100 transition-all active:scale-95" title="Mi ubicación GPS">📍</button>
+        <!-- Controles del mapa con z-index alto -->
+        <div class="absolute right-4 top-4 flex flex-col space-y-2 map-controls" style="z-index: 1000;">
+          <button onclick="zoomIn()" class="w-12 h-12 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white text-xl font-bold hover:bg-opacity-90 transition-all active:scale-95" style="z-index: 1001;">
+            +
+          </button>
+          <button onclick="zoomOut()" class="w-12 h-12 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white text-xl font-bold hover:bg-opacity-90 transition-all active:scale-95" style="z-index: 1001;">
+            −
+          </button>
+          <button onclick="centerOnTaxi()" class="w-12 h-12 bg-black bg-opacity-70 rounded-lg flex items-center justify-center text-white hover:bg-opacity-90 transition-all active:scale-95" title="Centrar en taxi" style="z-index: 1001;">
+            🚕
+          </button>
+          <button onclick="centerOnMyLocation()" class="w-12 h-12 bg-blue-600 bg-opacity-80 rounded-lg flex items-center justify-center text-white hover:bg-opacity-100 transition-all active:scale-95" title="Mi ubicación GPS" style="z-index: 1001;">
+            📍
+          </button>
         </div>
       </div>
 
       <!-- Panel inferior -->
       <div class="bg-black p-6 space-y-4">
         <div class="flex space-x-4">
-          <button onclick="toggleStatus()" id="status-btn" class="flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 active:scale-95 bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/30">🟢 LIBRE</button>
-
+          <button onclick="toggleStatus()" id="status-btn" class="flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 active:scale-95 bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/30">
+            🟢 LIBRE
+          </button>
+          
           <button class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl transition-all active:scale-95">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
           </button>
@@ -115,85 +158,97 @@
   </div>
 
   <script>
-    // --- Variables globales ---
+    // Variables globales
     let map;
     let userMarker;
     let myLocationMarker;
     let zoneShapes = [];
-    let zones = {}; // { name: { type: 'polygon'|'circle', coordinates: [[lat,lng],..] or lat,lng, radius }, ... }
+    let zones = {};
     let currentZone = 'Fuera de zona';
     let taxiLocation = { lat: 28.4636, lng: -16.2518 };
     let status = 'free';
     let useRealGPS = false;
     let gpsEnabled = true;
     let speechEnabled = true;
-    let watchId = null;
-    let simulationInterval = null;
+    let watchId;
+    let simulationInterval;
     let currentStreet = 'Obteniendo calle...';
     let mapInitialized = false;
     let zoneStartTime = null;
-    let lastReverseTimestamp = 0;
-    const REVERSE_INTERVAL = 10000; // ms, no más de 1 petición cada 10s
-    const zoneColors = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
 
-    // --- Helper voz ---
-    function speak(text, opts = {}) {
-      if (!speechEnabled || !('speechSynthesis' in window)) return;
-      try {
-        speechSynthesis.cancel();
-      } catch(e){}
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
-      utterance.volume = opts.volume ?? 0.9;
-      utterance.rate = opts.rate ?? 1.0;
-      speechSynthesis.speak(utterance);
-    }
+    const zoneColors = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#1E40AF', '#DC2626', '#047857', '#D97706'];
 
-    // --- Inicializar mapa ---
+    // Inicializar app cuando cargue la página
+    document.addEventListener('DOMContentLoaded', function() {
+      initMap();
+      setInterval(updateZoneTimer, 30000); // Actualizar timer cada 30 segundos
+    });
+
+    // Inicializar mapa
     function initMap() {
       if (mapInitialized) return;
-      map = L.map('map', { zoomControl:false, attributionControl:false }).setView([taxiLocation.lat, taxiLocation.lng], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution: '© OpenStreetMap contributors' }).addTo(map);
+      
+      console.log('Initializing map...');
+      
+      map = L.map('map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([taxiLocation.lat, taxiLocation.lng], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
 
       createTaxiMarker();
       startGPSSimulation();
-
-      // temporizador zona cada 1s
-      setInterval(updateZoneTimer, 1000);
-
+      
       mapInitialized = true;
-      console.log('Map initialized');
+      console.log('Map initialized successfully');
     }
 
-    // --- Marcador taxi ---
+    // Crear marcador del taxi
     function createTaxiMarker() {
       const color = status === 'free' ? '#10B981' : '#EF4444';
+      
       const taxiIcon = L.divIcon({
         className: 'taxi-marker',
         html: `<div style="
-          width:30px; height:30px; background:${color}; border:3px solid white; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.3); font-size:16px;
+          width: 30px; 
+          height: 30px; 
+          background: ${color}; 
+          border: 3px solid white; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+          font-size: 16px;
         ">🚕</div>`,
-        iconSize: [30,30],
-        iconAnchor: [15,15]
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
       });
+
       if (userMarker) map.removeLayer(userMarker);
       userMarker = L.marker([taxiLocation.lat, taxiLocation.lng], { icon: taxiIcon }).addTo(map);
     }
 
-    // --- Simulación GPS ---
+    // Simulación GPS
     function startGPSSimulation() {
       if (simulationInterval) clearInterval(simulationInterval);
+      
       simulationInterval = setInterval(() => {
         if (!useRealGPS) {
           const newLat = taxiLocation.lat + (Math.random() - 0.5) * 0.001;
           const newLng = taxiLocation.lng + (Math.random() - 0.5) * 0.001;
+          
           taxiLocation = { lat: newLat, lng: newLng };
           updateTaxiPosition(newLat, newLng);
         }
       }, 3000);
     }
 
-    // --- GPS real ---
+    // GPS real
     function startRealGPS() {
       if (!navigator.geolocation) {
         alert('GPS no soportado');
@@ -202,11 +257,16 @@
         return;
       }
 
-      const options = { enableHighAccuracy:true, timeout:10000, maximumAge:2000 };
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 2000
+      };
 
       const onSuccess = (position) => {
         const newLat = position.coords.latitude;
         const newLng = position.coords.longitude;
+        
         taxiLocation = { lat: newLat, lng: newLng };
         updateTaxiPosition(newLat, newLng);
         gpsEnabled = true;
@@ -221,72 +281,61 @@
         startGPSSimulation();
       };
 
-      // primera lectura y luego watch
       navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-      if (watchId) navigator.geolocation.clearWatch(watchId);
       watchId = navigator.geolocation.watchPosition(onSuccess, onError, options);
     }
 
-    // --- Actualizar posición taxi ---
+    // Actualizar posición del taxi
     function updateTaxiPosition(newLat, newLng) {
-      if (!userMarker) {
-        createTaxiMarker();
-      } else {
-        userMarker.setLatLng([newLat, newLng]);
-      }
-
-      document.getElementById('coordinates').textContent = `${newLat.toFixed(6)}, ${newLng.toFixed(6)}`;
-
-      // Geocodificación inversa inteligente: no más de REVERSE_INTERVAL
-      const now = Date.now();
-      if (now - lastReverseTimestamp > REVERSE_INTERVAL) {
-        lastReverseTimestamp = now;
+      if (!userMarker) return;
+      
+      userMarker.setLatLng([newLat, newLng]);
+      
+      // Actualizar coordenadas
+      document.getElementById('coordinates').textContent = `${newLat.toFixed(4)}, ${newLng.toFixed(4)}`;
+      
+      // Obtener calle cada 10 segundos para no saturar la API
+      if (Math.random() < 0.1) {
         getStreetName(newLat, newLng);
       }
-
+      
       detectZone(newLat, newLng);
     }
 
-    // --- Geocodificación inversa (OpenStreetMap Nominatim) ---
+    // Obtener nombre de calle
     function getStreetName(lat, lng) {
-      // protección simple por si la API falla
       fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
           let streetName = 'Ubicación desconocida';
-          if (data && data.address) {
-            streetName = data.address.road ||
-                         data.address.pedestrian ||
-                         data.address.cycleway ||
-                         data.address.path ||
-                         data.address.footway ||
-                         data.display_name?.split(',')[0] ||
-                         'Sin nombre';
-          } else if (data && data.display_name) {
-            streetName = data.display_name.split(',')[0];
+          
+          if (data.address) {
+            streetName = data.address.road || 
+                        data.address.pedestrian || 
+                        data.address.path ||
+                        data.address.footway ||
+                        data.display_name?.split(',')[0] ||
+                        'Sin nombre';
           }
+          
           currentStreet = streetName;
           document.getElementById('current-street').textContent = streetName;
         })
-        .catch(err => {
-          console.warn('Reverse geocode error', err);
+        .catch(() => {
           document.getElementById('current-street').textContent = 'Error obteniendo calle';
         });
     }
 
-    // --- Detección zonas ---
+    // Detectar zona
     function detectZone(lat, lng) {
       let detectedZone = 'Fuera de zona';
-      const previousZone = currentZone;
+      let previousZone = currentZone;
 
       Object.entries(zones).forEach(([name, data]) => {
-        if (data.type === 'polygon') {
-          if (isPointInPolygon(lat, lng, data.coordinates)) {
-            detectedZone = name;
-          }
-        } else if (data.type === 'circle') {
-          const dist = getDistance(lat, lng, data.lat, data.lng); // metros
-          if (dist <= data.radius) detectedZone = name;
+        if (data.type === 'polygon' && isPointInPolygon(lat, lng, data.coordinates)) {
+          detectedZone = name;
+        } else if (data.type === 'circle' && getDistance(lat, lng, data.lat, data.lng) < data.radius) {
+          detectedZone = name;
         }
       });
 
@@ -302,23 +351,33 @@
       }
     }
 
-    // --- Temporizador zona (cada segundo por setInterval) ---
+    // Actualizar temporizador de zona
     function updateZoneTimer() {
       if (zoneStartTime && currentZone !== 'Fuera de zona') {
         const minutes = Math.floor((Date.now() - zoneStartTime) / 60000);
-        const seconds = Math.floor(((Date.now() - zoneStartTime) % 60000) / 1000);
-        document.getElementById('zone-timer').textContent = `${minutes}m ${seconds}s`;
+        document.getElementById('zone-timer').textContent = `${minutes} min`;
       } else {
         document.getElementById('zone-timer').textContent = '0 min';
       }
     }
 
-    // --- Notificación de zona ---
+    // Notificación de zona con voz
     function showZoneNotification(zoneName) {
-      if (navigator.vibrate) navigator.vibrate([200,100,200]);
-
-      if (speechEnabled) speak(`Entrando en zona ${zoneName}`, { volume: 0.85 });
-
+      // Vibración
+      if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+      }
+      
+      // Anuncio por voz
+      if (speechEnabled && 'speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(`Entrando en zona ${zoneName}`);
+        utterance.lang = 'es-ES';
+        utterance.volume = 0.8;
+        utterance.rate = 1.0;
+        speechSynthesis.speak(utterance);
+      }
+      
+      // Notificación visual
       const notification = document.createElement('div');
       notification.style.cssText = `
         position: fixed;
@@ -336,38 +395,230 @@
       `;
       notification.textContent = `🎯 Zona: ${zoneName}`;
       document.body.appendChild(notification);
-      setTimeout(()=>{ if (document.body.contains(notification)) document.body.removeChild(notification); }, 4000);
+      
+      setTimeout(() => {
+        if (document.body.contains(notification)) {
+          document.body.removeChild(notification);
+        }
+      }, 4000);
     }
 
-    // --- Punto en polígono (ray-casting). polygonCoords = [[lat,lng],...] ---
+    // Algoritmos de detección
     function isPointInPolygon(lat, lng, polygonCoords) {
       let inside = false;
+      const x = lat, y = lng;
+      
       for (let i = 0, j = polygonCoords.length - 1; i < polygonCoords.length; j = i++) {
         const xi = polygonCoords[i][0], yi = polygonCoords[i][1];
         const xj = polygonCoords[j][0], yj = polygonCoords[j][1];
-
-        const intersect = ((yi > lng) !== (yj > lng)) && (lat < (xj - xi) * (lng - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
+        
+        if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+          inside = !inside;
+        }
       }
+      
       return inside;
     }
 
-    // --- Distancia entre dos puntos (metros) ---
     function getDistance(lat1, lng1, lat2, lng2) {
       const R = 6371e3;
       const φ1 = lat1 * Math.PI/180;
       const φ2 = lat2 * Math.PI/180;
-      const Δφ = (lat2 - lat1) * Math.PI/180;
-      const Δλ = (lng2 - lng1) * Math.PI/180;
-      const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
+      const Δφ = (lat2-lat1) * Math.PI/180;
+      const Δλ = (lng2-lng1) * Math.PI/180;
+
+      const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                Math.cos(φ1) * Math.cos(φ2) *
+                Math.sin(Δλ/2) * Math.sin(Δλ/2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
       return R * c;
     }
 
-    // --- Controles básicos ---
+    // Cargar archivo UMap - MEJORADO
+    function loadUMapFile() {
+      document.getElementById('fileInput').click();
+    }
+
+    function handleFileLoad(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const umapData = JSON.parse(e.target.result);
+          console.log('UMap data loaded:', umapData);
+          parseUMapData(umapData);
+        } catch (error) {
+          console.error('Error parsing UMap file:', error);
+          alert('Error al leer el archivo .umap');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Parser universal de UMap
+    function parseUMapData(umapData) {
+      console.log('Parsing UMap data...');
+      
+      const newZones = {};
+      let colorIndex = 0;
+
+      // Función recursiva para encontrar features
+      function findFeatures(obj, path = '') {
+        if (!obj || typeof obj !== 'object') return;
+        
+        if (obj.features && Array.isArray(obj.features)) {
+          console.log(`Found features at ${path}:`, obj.features.length);
+          
+          obj.features.forEach((feature, index) => {
+            const name = feature.properties?.name || 
+                        feature.properties?.title || 
+                        feature.properties?.description || 
+                        `Zona ${colorIndex + 1}`;
+            
+            if (!name || !feature.geometry) return;
+
+            if (feature.geometry.type === 'Polygon') {
+              let coordinates = feature.geometry.coordinates[0];
+              if (!coordinates || coordinates.length === 0) return;
+
+              // Convertir [lng, lat] a [lat, lng]
+              const leafletCoords = coordinates.map(coord => [coord[1], coord[0]]);
+              
+              // Determinar color
+              let finalColor = zoneColors[colorIndex % zoneColors.length];
+              
+              const colorSources = [
+                feature.properties?._umap_options?.color,
+                feature.properties?.color,
+                obj._umap_options?.color
+              ];
+              
+              for (const colorSource of colorSources) {
+                if (colorSource) {
+                  const colorMap = {
+                    'red': '#EF4444', 'green': '#10B981', 'blue': '#3B82F6',
+                    'yellow': '#F59E0B', 'purple': '#8B5CF6', 'pink': '#EC4899',
+                    'orange': '#F97316', 'cyan': '#14B8A6', 'darkred': '#7F1D1D',
+                    'darkgreen': '#065F46', 'darkblue': '#1E3A8A'
+                  };
+                  
+                  const umapColor = colorSource.toString().toLowerCase();
+                  if (colorMap[umapColor]) {
+                    finalColor = colorMap[umapColor];
+                    break;
+                  } else if (umapColor.startsWith('#')) {
+                    finalColor = umapColor;
+                    break;
+                  }
+                }
+              }
+              
+              newZones[name] = {
+                type: 'polygon',
+                coordinates: leafletCoords,
+                color: finalColor
+              };
+              
+              colorIndex++;
+              console.log(`Created polygon: ${name} with color ${finalColor}`);
+              
+            } else if (feature.geometry.type === 'Point') {
+              const [lng, lat] = feature.geometry.coordinates;
+              
+              newZones[name] = {
+                type: 'circle',
+                lat: lat,
+                lng: lng,
+                color: zoneColors[colorIndex % zoneColors.length],
+                radius: 100
+              };
+              colorIndex++;
+            }
+          });
+        }
+        
+        // Búsqueda recursiva
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key) && typeof obj[key] === 'object') {
+            findFeatures(obj[key], path ? `${path}.${key}` : key);
+          }
+        }
+      }
+
+      findFeatures(umapData);
+
+      console.log('Zones created:', Object.keys(newZones).length);
+      
+      if (Object.keys(newZones).length === 0) {
+        alert('No se encontraron polígonos en el archivo .umap');
+        return;
+      }
+      
+      zones = newZones;
+      updateMapZones();
+      document.getElementById('zone-count').textContent = Object.keys(zones).length;
+
+      // Centrar mapa
+      if (umapData.properties?.center) {
+        const { lat, lng } = umapData.properties.center;
+        const zoom = umapData.properties.zoom || 15;
+        map.setView([lat, lng], zoom);
+      } else if (Object.keys(zones).length > 0) {
+        const firstZone = Object.values(zones)[0];
+        if (firstZone.type === 'polygon' && firstZone.coordinates.length > 0) {
+          const centerLat = firstZone.coordinates.reduce((sum, coord) => sum + coord[0], 0) / firstZone.coordinates.length;
+          const centerLng = firstZone.coordinates.reduce((sum, coord) => sum + coord[1], 0) / firstZone.coordinates.length;
+          map.setView([centerLat, centerLng], 15);
+        }
+      }
+    }
+
+    // Actualizar zonas en el mapa
+    function updateMapZones() {
+      if (!map || !window.L) return;
+
+      // Limpiar zonas existentes
+      zoneShapes.forEach(shape => {
+        map.removeLayer(shape.layer);
+      });
+      zoneShapes = [];
+
+      // Añadir nuevas zonas
+      Object.entries(zones).forEach(([name, data]) => {
+        let layer;
+        
+        if (data.type === 'polygon') {
+          layer = L.polygon(data.coordinates, {
+            color: data.color,
+            fillColor: data.color,
+            fillOpacity: 0.3,
+            weight: 3
+          }).addTo(map);
+        } else if (data.type === 'circle') {
+          layer = L.circle([data.lat, data.lng], {
+            color: data.color,
+            fillColor: data.color,
+            fillOpacity: 0.2,
+            radius: data.radius,
+            weight: 2
+          }).addTo(map);
+        }
+        
+        if (layer) {
+          layer.bindPopup(`<b>${name}</b><br>Tipo: ${data.type}`);
+          zoneShapes.push({ name, layer, data });
+        }
+      });
+    }
+
+    // Funciones de control
     function toggleStatus() {
       status = status === 'free' ? 'busy' : 'free';
       const btn = document.getElementById('status-btn');
+      
       if (status === 'free') {
         btn.className = 'flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 active:scale-95 bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/30';
         btn.innerHTML = '🟢 LIBRE';
@@ -375,12 +626,15 @@
         btn.className = 'flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 active:scale-95 bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/30';
         btn.innerHTML = '🔴 OCUPADO';
       }
+      
       createTaxiMarker();
+      
       if (navigator.vibrate) navigator.vibrate(100);
     }
 
     function toggleGPS() {
       useRealGPS = !useRealGPS;
+      
       if (useRealGPS) {
         if (simulationInterval) clearInterval(simulationInterval);
         startRealGPS();
@@ -388,51 +642,59 @@
         if (watchId) navigator.geolocation.clearWatch(watchId);
         startGPSSimulation();
       }
+      
       updateGPSStatus();
+      
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
     function toggleSpeech() {
       speechEnabled = !speechEnabled;
       const btn = document.getElementById('speech-toggle');
+      
       if (speechEnabled) {
         btn.textContent = '🔊';
         btn.title = 'Voz ON';
         btn.className = 'p-2 rounded-lg transition-all active:scale-95 bg-green-600 hover:bg-green-700';
-        speak('Voz activada', { volume: 0.9 });
+        
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('Voz activada');
+          utterance.lang = 'es-ES';
+          speechSynthesis.speak(utterance);
+        }
       } else {
-        // cancel any speaking
-        try { speechSynthesis.cancel(); } catch(e){}
         btn.textContent = '🔇';
         btn.title = 'Voz OFF';
         btn.className = 'p-2 rounded-lg transition-all active:scale-95 bg-gray-600 hover:bg-gray-700';
       }
+      
       updateInstructions();
+      
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
     function updateGPSStatus() {
       const indicator = document.getElementById('gps-indicator');
-      const statusEl = document.getElementById('gps-status');
+      const status = document.getElementById('gps-status');
       const toggle = document.getElementById('gps-toggle');
-
+      
       if (useRealGPS && gpsEnabled) {
         indicator.className = 'w-3 h-3 rounded-full bg-green-400 animate-pulse';
-        statusEl.textContent = 'GPS REAL ON';
+        status.textContent = 'GPS REAL ON';
         toggle.className = 'p-2 rounded-lg transition-all active:scale-95 bg-green-600 text-white';
         toggle.textContent = '📡';
       } else if (useRealGPS && !gpsEnabled) {
         indicator.className = 'w-3 h-3 rounded-full bg-red-400';
-        statusEl.textContent = 'GPS ERROR';
+        status.textContent = 'GPS ERROR';
         toggle.className = 'p-2 rounded-lg transition-all active:scale-95 bg-red-600 text-white';
         toggle.textContent = '📡';
       } else {
         indicator.className = 'w-3 h-3 rounded-full bg-green-400 animate-pulse';
-        statusEl.textContent = 'GPS SIM ON';
+        status.textContent = 'GPS SIM ON';
         toggle.className = 'p-2 rounded-lg transition-all active:scale-95 bg-gray-700 text-gray-400 hover:bg-gray-600';
         toggle.textContent = '🎯';
       }
-
+      
       updateInstructions();
     }
 
@@ -442,188 +704,131 @@
       document.getElementById('instructions').textContent = `📱 ${gpsText} | ⬆️ Carga .umap | ${voiceText}`;
     }
 
-    // --- Controles mapa ---
-    function zoomIn() { if (map) map.zoomIn(); }
-    function zoomOut() { if (map) map.zoomOut(); }
+    // Controles del mapa
+    function zoomIn() {
+      if (map) map.zoomIn();
+    }
+
+    function zoomOut() {
+      if (map) map.zoomOut();
+    }
 
     function centerOnTaxi() {
       if (map) {
         map.setView([taxiLocation.lat, taxiLocation.lng], 16);
-        if (speechEnabled) speak('Centrado en taxi', { volume: 0.6 });
+        
+        if (speechEnabled && 'speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('Centrado en taxi');
+          utterance.lang = 'es-ES';
+          utterance.volume = 0.6;
+          speechSynthesis.speak(utterance);
+        }
       }
     }
 
-    // --- MI UBICACIÓN (se llama con event para poder manipular el botón) ---
-    function centerOnMyLocation(event) {
+    function centerOnMyLocation() {
       if (!navigator.geolocation) {
         alert('GPS no disponible');
         return;
       }
-
-      const btn = event?.currentTarget || null;
-      if (btn) {
-        btn.style.background = '#1E40AF';
-        btn.innerHTML = '⏳';
-      }
-
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        // centrar
-        if (map) map.setView([lat, lng], 16);
-
-        // marcador pulsante
-        if (myLocationMarker) {
-          try { map.removeLayer(myLocationMarker); } catch(e){}
-        }
-        const myLocationIcon = L.divIcon({
-          className: 'my-location-marker',
-          html: '<div class="my-location-pulse" style="width:20px; height:20px; background:#3B82F6; border:3px solid white; border-radius:50%; box-shadow:0 0 15px rgba(59,130,246,0.6);"></div>',
-          iconSize: [20,20],
-          iconAnchor: [10,10]
-        });
-        myLocationMarker = L.marker([lat, lng], { icon: myLocationIcon }).addTo(map);
-
-        // anuncio por voz
-        if (speechEnabled) speak('Ubicación encontrada', { volume: 0.9 });
-
-        // vibración breve
-        if (navigator.vibrate) navigator.vibrate(120);
-
-        // geocodificación inversa inmediata para la UI
-        getStreetName(lat, lng);
-
-        // quitar marcador tras 8 segundos
-        setTimeout(() => {
-          try { if (myLocationMarker) map.removeLayer(myLocationMarker); myLocationMarker = null; } catch(e){}
-        }, 8000);
-
-        // restaurar estilo del botón
-        setTimeout(() => {
-          if (btn) {
-            btn.style.background = '';
-            btn.innerHTML = '📍';
-          }
-        }, 900);
-      }, (err) => {
-        console.error('Error obteniendo ubicación:', err);
-        alert('No se pudo obtener la ubicación');
-        if (btn) { btn.style.background = ''; btn.innerHTML = '📍'; }
-      }, { enableHighAccuracy:true, timeout:10000, maximumAge:2000 });
-    }
-
-    // --- Cargar archivo UMap / GeoJSON simple ---
-    function loadUMapFile() {
-      document.getElementById('fileInput').click();
-    }
-
-    function handleFileLoad(ev) {
-      const file = ev.target.files && ev.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const text = e.target.result;
-          const obj = JSON.parse(text);
-          // limpiar zonas previas
-          clearZones();
-          parseAndDrawZones(obj);
-        } catch(err) {
-          console.error('Error leyendo archivo', err);
-          alert('Archivo inválido. Asegúrate de subir un .umap o .json válido');
-        } finally {
-          // reset input
-          ev.target.value = '';
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function clearZones() {
-      zoneShapes.forEach(s => { try { map.removeLayer(s); } catch(e){} });
-      zoneShapes = [];
-      zones = {};
-      document.getElementById('zone-count').textContent = '0';
-      document.getElementById('current-zone').textContent = 'Zona: Fuera de zona';
-      zoneStartTime = null;
-    }
-
-    function parseAndDrawZones(geojsonLike) {
-      // Soportamos varias estructuras: GeoJSON FeatureCollection o UMap export (que contiene "features")
-      let features = [];
-      if (geojsonLike.type === 'FeatureCollection' && Array.isArray(geojsonLike.features)) features = geojsonLike.features;
-      else if (Array.isArray(geojsonLike.features)) features = geojsonLike.features;
-      else if (Array.isArray(geojsonLike)) features = geojsonLike;
-      else {
-        // intentar buscar features en propiedades
-        features = geojsonLike.features || [];
-      }
-
-      let count = 0;
-      features.forEach((f, idx) => {
-        try {
-          const geom = f.geometry || f;
-          const props = f.properties || {};
-          if (!geom) return;
-
-          if (geom.type === 'Polygon' || geom.type === 'MultiPolygon') {
-            // convertir coordenadas [lng,lat] -> [lat,lng]
-            const polyCoords = (geom.type === 'Polygon' ? geom.coordinates[0] : geom.coordinates[0][0])
-              .map(coord => [coord[1], coord[0]]);
-            const name = props.name || props.title || props.descr || `Zona ${idx+1}`;
-            const color = zoneColors[count % zoneColors.length];
-
-            const poly = L.polygon(polyCoords, { color, weight: 2, fillOpacity: 0.12 }).addTo(map);
-            zoneShapes.push(poly);
-            zones[name] = { type:'polygon', coordinates: polyCoords };
-            count++;
-          } else if (geom.type === 'Point') {
-            // si tiene radius en properties -> círculo
-            const coord = geom.coordinates;
-            const lat = coord[1], lng = coord[0];
-            const radius = props.radius || props.RADIUS || props.r || null;
-            if (radius) {
-              const name = props.name || props.title || props.descr || `Zona ${idx+1}`;
-              const color = zoneColors[count % zoneColors.length];
-              const circle = L.circle([lat, lng], { radius: Number(radius), color, weight: 2, fillOpacity: 0.08 }).addTo(map);
-              zoneShapes.push(circle);
-              zones[name] = { type:'circle', lat, lng, radius: Number(radius) };
-              count++;
-            } else {
-              // Punto suelto -> marcador (se ignora como zona)
+      
+      const btn = event.target;
+      const originalBg = btn.style.background;
+      const originalContent = btn.innerHTML;
+      
+      btn.style.background = '#1E40AF';
+      btn.innerHTML = '⏳';
+      
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          map.setView([lat, lng], 16);
+          
+          // Marcador de mi ubicación con animación
+          if (myLocationMarker) map.removeLayer(myLocationMarker);
+          
+          const myLocationIcon = L.divIcon({
+            className: 'my-location-marker',
+            html: '<div class="my-location-pulse" style="width: 20px; height: 20px; background: #3B82F6; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 15px rgba(59,130,246,0.6);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          });
+          
+          myLocationMarker = L.marker([lat, lng], { icon: myLocationIcon }).addTo(map);
+          
+          // Eliminar marcador después de 8 segundos
+          setTimeout(() => {
+            if (myLocationMarker) {
+              map.removeLayer(myLocationMarker);
+              myLocationMarker = null;
             }
+          }, 8000);
+          
+          // Restaurar botón
+          btn.style.background = originalBg;
+          btn.innerHTML = '📍';
+          
+          // Anuncio por voz
+          if (speechEnabled && 'speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance('Ubicación encontrada');
+            utterance.lang = 'es-ES';
+            utterance.volume = 0.7;
+            speechSynthesis.speak(utterance);
           }
-        } catch(e) {
-          console.warn('Error procesando feature', e);
+          
+          if (navigator.vibrate) navigator.vibrate(100);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          btn.style.background = originalBg;
+          btn.innerHTML = originalContent;
+          alert('Error obteniendo ubicación: ' + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
         }
-      });
-
-      document.getElementById('zone-count').textContent = `${count}`;
-      if (count > 0) {
-        speak(`Cargadas ${count} zonas`, { volume: 0.8 });
-        // ajustar vista a todas las zonas
-        try {
-          const group = L.featureGroup(zoneShapes);
-          map.fitBounds(group.getBounds(), { padding: [40,40] });
-        } catch(e){}
-      } else {
-        alert('No se han detectado polígonos ni círculos con radio en el archivo.');
-      }
+      );
     }
 
-    // --- Inicializar en carga DOM ---
-    window.addEventListener('DOMContentLoaded', () => {
-      initMap();
-      updateGPSStatus();
-      updateInstructions();
-    });
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swContent = `
+          const CACHE_NAME = 'taximap-v1';
+          const urlsToCache = [
+            './',
+            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js',
+            'https://cdn.tailwindcss.com'
+          ];
 
-    // --- Evita errores al cerrar pestaña con speech activo ---
-    window.addEventListener('beforeunload', () => {
-      try { speechSynthesis.cancel(); } catch(e){}
-      if (watchId) try { navigator.geolocation.clearWatch(watchId); } catch(e){}
-    });
+          self.addEventListener('install', event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then(cache => cache.addAll(urlsToCache))
+            );
+          });
+
+          self.addEventListener('fetch', event => {
+            event.respondWith(
+              caches.match(event.request)
+                .then(response => response || fetch(event.request))
+            );
+          });
+        `;
+        
+        const blob = new Blob([swContent], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        
+        navigator.serviceWorker.register(swUrl)
+          .then(registration => console.log('SW registered:', registration))
+          .catch(error => console.log('SW registration failed:', error));
+      });
+    }
   </script>
 </body>
 </html>
